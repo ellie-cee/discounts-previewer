@@ -1,0 +1,4 @@
+venv/
+config.json
+_nop*
+__pycache__
