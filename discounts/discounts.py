@@ -20,7 +20,7 @@ class DiscountHandler:
         self.code = code
         self.app = app
         self.site_data = dict(self.db().execute(f"select * from site where shopify_name='{site}' limit 1").fetchone())
-        print(self.site_data,file=sys.stderr)
+        
         
         if not self.site_data is None:
             self.client = Client(
@@ -32,7 +32,7 @@ class DiscountHandler:
                 ),
                 fetch_schema_from_transport=False
             )
-            print(f"https://{self.site_data.get('shopify_name')}.myshopify.com/admin/api/2023-04/graphql.json")
+            
     def db(self,file="sites.sqlite"):
         with self.app.app_context():
             handle = getattr(g,"_database",None)
@@ -60,7 +60,7 @@ class DiscountHandler:
             res = res["codeDiscount"]
         
         now = datetime.now()
-        print(json.dumps(res,indent=2),file=sys.stderr)
+        
         if now<parser.parse(res["startsAt"].split("T")[0]):
             return self.retval(payload,200,f"Code {self.code} has not started yet!")
         if res["endsAt"] is not None:
@@ -104,7 +104,7 @@ class DiscountHandler:
         if res["discountClass"] == "PRODUCT":
             one_per_order_applied = False
             for item in payload["items"]:
-                print(item["product_id"],products,file=sys.stderr)
+                
                 apply_discount = True
                 if products is None or item["product_id"] in products:
                     if not res["benefits"]["oneTimeValid"] and not "selling_plan_allocation" in item:
@@ -115,7 +115,7 @@ class DiscountHandler:
                     apply_discount = False
                     
                 if apply_discount:
-                    print("applying discounr",file=sys.stderr)
+                    
                     if "percentage" in res["benefits"]["value"]:
                         new_price = int(
                             ((item["discounted_price"]/100)*(1-res["benefits"]["value"]["percentage"])*100)
@@ -146,7 +146,7 @@ class DiscountHandler:
                     )
                 
                 
-        print(total_items,subtotal,file=sys.stderr)
+        
         
         return Response(
             json.dumps(payload),
