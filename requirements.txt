@@ -16,3 +16,4 @@ ShopifyAPI
 requests
 Flask-Caching
 gql
+dateutil
