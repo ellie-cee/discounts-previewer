@@ -15,5 +15,5 @@ flask-cors
 ShopifyAPI
 requests
 Flask-Caching
-gql
+gql[requests]
 python-dateutil
