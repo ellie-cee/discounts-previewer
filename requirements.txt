@@ -15,4 +15,4 @@ flask-cors
 ShopifyAPI
 requests
 Flask-Caching
-gql[all]
+gql
